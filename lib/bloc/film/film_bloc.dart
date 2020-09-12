@@ -19,15 +19,18 @@ class FilmBloc extends Bloc<FilmEvent, FilmState> {
     FilmEvent event,
   ) async* {
     if (event is InitialRequestEvent) {
-      print("line 21");
       yield FilmInitialState();
-      // try {
-      List<Film> film = await HttpClient.getFilms(page: _page);
-      print("line 25 " + film[1].title);
-      yield LoadedFilmState(films: film);
-      // } catch (e) {
-      //   print("line 27 $e");
-      // }
+      try {
+      List<Film> films = await HttpClient.getFilms(page: _page);
+      yield LoadedFilmState(films: films);
+      } catch (e) {
+        print("line 27 $e");
+      }
+    }
+    if(event is NextPageEvent) {
+      print("line 31");
+      List<Film> films = await HttpClient.getFilms(page: ++_page);
+      yield LoadedFilmState(films: films);
     }
   }
 }

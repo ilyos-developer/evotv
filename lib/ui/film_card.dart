@@ -1,27 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:movit_bloc/models/films.dart';
 
 import '../constants.dart';
 
-class FilmCard extends StatefulWidget {
-  List<Film> films;
-  int index;
-  FilmCard({Key key, this.films, this.index}) : super(key: key);
-
-  @override
-  _FilmCardState createState() => _FilmCardState(films: films, index: index);
-}
-
-class _FilmCardState extends State<FilmCard> {
+class FilmCard extends StatelessWidget {
   List<Film> films;
   int index;
 
-  _FilmCardState({this.films, this.index});
+  FilmCard({this.films, this.index});
 
-  @override
-  void initState() {
-    super.initState();
-  }
   // FutureBuilder _buildFilmsDetails() {
   //   return FutureBuilder(
   //     builder: (context, snapshot) {
@@ -140,16 +128,16 @@ class _FilmCardState extends State<FilmCard> {
                                 style: TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.w400),
                               ),
-                              // SvgPicture.asset('assets/icons/imdb.svg',
-                              //     width: 15, height: 15),
+                              SvgPicture.asset('assets/icons/imdb.svg',
+                                  width: 15, height: 15),
                               SizedBox(width: 5),
                               Text(
                                 films[index].ratingImdb.toString(),
                                 style: TextStyle(fontSize: 12),
                               ),
                               SizedBox(width: 10),
-                              // SvgPicture.asset('assets/icons/kinopoisk.svg',
-                              //     width: 18, height: 18),
+                              SvgPicture.asset('assets/icons/kinopoisk.svg',
+                                  width: 18, height: 18),
                               SizedBox(width: 5),
                               Text(
                                 films[index].ratingKp.toString(),

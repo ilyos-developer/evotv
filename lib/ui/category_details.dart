@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:movit_bloc/bloc/film/film_bloc.dart';
 import 'package:movit_bloc/models/films.dart';
 
@@ -18,7 +19,7 @@ class CategoryDetails extends StatelessWidget {
 
   void getFilters(Map filters) {
     // setState(() {
-      this.filters = filters;
+    this.filters = filters;
     // });
   }
 
@@ -90,7 +91,8 @@ class CategoryDetails extends StatelessWidget {
                                   SizedBox(height: size.height * 0.01),
                                   _buildHashtegs(size, "#Комедия", "#Юмор"),
                                   SizedBox(height: size.height * 0.01),
-                                  _buildHashtegs(size, "#Семейное", "#Фантастикa"),
+                                  _buildHashtegs(
+                                      size, "#Семейное", "#Фантастикa"),
                                   SizedBox(height: size.height * 0.01),
                                   _buildHashtegs(size, "#Новинки", "#Топ50"),
                                 ],
@@ -116,17 +118,14 @@ class CategoryDetails extends StatelessWidget {
 
   Row _buildHashtegs(Size size, String str1, str2) {
     return Row(
-      mainAxisAlignment:
-      MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
           height: size.height * 0.05,
           width: size.width * 0.4,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-                Radius.circular(30)),
-            color:
-            Color(0xff000000).withOpacity(1),
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            color: Color(0xff000000).withOpacity(1),
             border: Border.all(
               color: kPrimaryColor,
               width: 2,
@@ -134,8 +133,7 @@ class CategoryDetails extends StatelessWidget {
           ),
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.only(
-                  left: 10, right: 10),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Text(
@@ -159,15 +157,12 @@ class CategoryDetails extends StatelessWidget {
               color: kPrimaryColor,
               width: 2,
             ),
-            borderRadius: BorderRadius.all(
-                Radius.circular(30)),
-            color:
-            Color(0xff000000).withOpacity(1),
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            color: Color(0xff000000).withOpacity(1),
           ),
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.only(
-                  left: 10, right: 10),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Text(
@@ -187,41 +182,36 @@ class CategoryDetails extends StatelessWidget {
     );
   }
 
-  BlocListener _buildFilms(BuildContext context) {
-    return BlocListener(
-      cubit: BlocProvider.of<FilmBloc>(context),
-      listener: (BuildContext context, state) {
-        // if (state is GoHomePageState) {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => HomePage(),
-        //     ),
-        //   );
-        // }
-      },
-      child: BlocBuilder<FilmBloc, FilmState>(builder: (context, state) {
+  BlocBuilder _buildFilms(BuildContext context) {
+    // ignore: close_sinks
+    final FilmBloc _filmBloc = BlocProvider.of<FilmBloc>(context);
+    return BlocBuilder<FilmBloc, FilmState>(builder: (context, state) {
         if (state is FilmInitialState) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
         if (state is LoadedFilmState) {
-          print("line 209 ${state.films[1].title}");
-          return ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: state.films.length,
-            itemBuilder: (context, index) => FilmCard(
-              films: state.films,
-              index: index,
+          return LazyLoadScrollView(
+            onEndOfPage: () {
+              print("line 208");
+              _filmBloc.add(NextPageEvent());
+            },
+            child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: state.films.length,
+              itemBuilder: (context, index) => FilmCard(
+                films: state.films,
+                index: index,
+              ),
             ),
           );
         }
         return Center(
-          child: Text("asldk"),
+          child: Text("Что то пошло не так "),
         );
-      }),
-    );
+      });
+    // );
   }
 }
