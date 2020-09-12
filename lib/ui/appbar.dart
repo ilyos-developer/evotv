@@ -18,7 +18,7 @@ class App extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "EVO Movies",
+              "Evo Tv",
               style: TextStyle(
                   fontSize: 24,
                   fontFamily: kTextFontFamily,
@@ -43,12 +43,7 @@ class App extends StatelessWidget {
                                 MaterialLocalizations.of(context).dialogLabel,
                             barrierColor: Colors.black.withOpacity(0.5),
                             pageBuilder: (context, _, __) {
-
-
                               // return FilterScreen(this.callback);
-
-
-
                             },
                             transitionBuilder: (context, animation,
                                 secondaryAnimation, child) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movit_bloc/bloc/film/film_bloc.dart';
 import 'package:movit_bloc/ui/login/login.dart';
 
 import 'bloc/login_auth/login_bloc.dart';
@@ -16,9 +17,12 @@ class MyApp extends StatelessWidget {
         BlocProvider<LoginBloc>(
           create: (context) => LoginBloc()..add(InitialSendingEvent()),
         ),
+        BlocProvider<FilmBloc>(
+          create: (context) => FilmBloc()..add(InitialRequestEvent()),
+        ),
       ],
       child: MaterialApp(
-        title: 'Movit',
+        title: 'Evo Tv',
         theme: ThemeData.dark(),
         builder: (context, child) {
           return ScrollConfiguration(
