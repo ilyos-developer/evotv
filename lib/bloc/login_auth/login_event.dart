@@ -5,6 +5,8 @@ abstract class LoginEvent {}
 
 class InitialSendingEvent extends LoginEvent {}
 
+class AuthorizationCheckEvent extends LoginEvent {}
+
 class SendedCodeEvent extends LoginEvent {
   final int phoneNumber;
 

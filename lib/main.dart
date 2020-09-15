@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movit_bloc/bloc/film/film_bloc.dart';
+import 'package:movit_bloc/ui/home/home_page.dart';
 import 'package:movit_bloc/ui/login/login.dart';
 
 import 'bloc/login_auth/login_bloc.dart';
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<LoginBloc>(
-          create: (context) => LoginBloc()..add(InitialSendingEvent()),
+          create: (context) => LoginBloc()..add(AuthorizationCheckEvent()),
         ),
         BlocProvider<FilmBloc>(
           create: (context) => FilmBloc()..add(InitialRequestEvent()),
@@ -30,18 +31,20 @@ class MyApp extends StatelessWidget {
             child: child,
           );
         },
-        initialRoute: '/',
-        onGenerateRoute: (routeSettings) {
-          switch (routeSettings.name) {
-            case '/':
-              return MaterialPageRoute(
-                  builder: (context) => Login(), settings: routeSettings);
-            default:
-              return MaterialPageRoute(
-                  builder: (context) => Login(), settings: routeSettings);
-              break;
-          }
-        },
+        home: BlocBuilder<LoginBloc, LoginState>(
+          builder: (context, state) {
+            if (state is CheckAuthorizationState) {
+              if (state.userToken) {
+                return HomePage();
+              } else {
+                return Login();
+              }
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        ),
       ),
     );
   }

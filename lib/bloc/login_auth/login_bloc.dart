@@ -11,7 +11,7 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  static final _storage = new FlutterSecureStorage();
+  static final _storage = FlutterSecureStorage();
 
   LoginBloc() : super(LoginInitialState());
 
@@ -19,6 +19,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(
     LoginEvent event,
   ) async* {
+    if(event is AuthorizationCheckEvent) {
+      var token = await _storage.read(key: "userToken");
+      print("line 24 $token");
+      if(token != null) {
+        yield CheckAuthorizationState(true);
+      } else {
+        yield CheckAuthorizationState(false);
+      }
+    }
     if (event is SendedCodeEvent) {
       yield LoginInitialState();
       try {
